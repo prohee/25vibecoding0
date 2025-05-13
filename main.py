@@ -1,3 +1,4 @@
+import streamlit as st
 # MBTI 유형에 따른 이모지와 추천 직업
 mbti_data = {
     "INTJ": {
