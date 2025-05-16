@@ -46,15 +46,14 @@ def analyze_personal_color_gemini(image, gemini_api_key):
     )
 
     try:
-        response = model.generate_content(
-            [
-                prompt,
-                {
-                    "mime_type": "image/jpeg",
-                    "data": byte_data,
-                }
-            ]
-        )
+        response = model.generate_content(    [
+        prompt,
+        {
+            "mime_type": "image/jpeg",
+            "data": byte_data,
+        }
+    ]
+    )
         result = response.text.strip()
         return result
     except Exception as e:
