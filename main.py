@@ -24,9 +24,9 @@ facecolor_data = {
     }
 }
 
-st.title("페이스컬러(퍼스널 컬러) 기반 코디 추천")
+st.title("퍼스널 컬러 기반 코디 추천")
 
-st.write("당신의 페이스컬러(퍼스널 컬러)를 선택하세요:")
+st.write("당신의 퍼스널 컬러를 선택하세요:")
 
 facecolor = st.selectbox(
     "퍼스널 컬러를 선택하세요.",
