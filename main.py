@@ -1,39 +1,47 @@
 import streamlit as st
 
-# MBTI 유형에 따른 이모지와 추천 직업
-mbti_data = {
-    "INTJ": {
-        "emoji": "🧠",
-        "jobs": ["데이터 과학자", "소프트웨어 개발자", "전략 컨설턴트"]
+# 퍼스널 컬러별 추천 데이터
+facecolor_data = {
+    '봄 웜톤': {
+        '의상': ['라이트 옐로우', '코랄', '라이트 베이지', '연두색'],
+        '화장법': ['코랄 립', '피치 블러셔', '골드 아이섀도우'],
+        '코디': '밝고 화사한 파스텔 계열 원피스와 가벼운 메이크업으로 생기있는 느낌을 연출하세요.'
     },
-    "INFP": {
-        "emoji": "🎨",
-        "jobs": ["작가", "그래픽 디자이너", "심리 상담사"]
+    '여름 쿨톤': {
+        '의상': ['라이트 블루', '라벤더', '쿨 핑크', '민트'],
+        '화장법': ['로지 핑크 립', '쿨톤 블러셔', '실버 펄 아이섀도우'],
+        '코디': '시원한 느낌의 연청 데님 자켓과 화이트 티셔츠, 핑크 립 포인트로 청량함을 강조해보세요.'
     },
-    "ENTP": {
-        "emoji": "💡",
-        "jobs": ["기업가", "마케팅 전문가", "변호사"]
+    '가을 웜톤': {
+        '의상': ['카멜', '올리브', '버건디', '머스타드'],
+        '화장법': ['브릭 립', '브라운 블러셔', '카키/브론즈 아이섀도우'],
+        '코디': '딥한 브라운 자켓과 올리브 컬러 스커트, 브릭 립으로 분위기 있는 가을룩을 완성하세요.'
     },
-    "ESFJ": {
-        "emoji": "🤝",
-        "jobs": ["교사", "인사 관리자", "간호사"]
-    },
-    # 여기에 다른 MBTI 유형을 추가하세요
+    '겨울 쿨톤': {
+        '의상': ['블랙', '네이비', '와인', '로얄 블루'],
+        '화장법': ['레드 립', '플럼 블러셔', '그레이 아이섀도우'],
+        '코디': '세련된 블랙 수트와 레드 립으로 도시적인 매력을 뽐내보세요.'
+    }
 }
 
-# Streamlit 앱 설정
-st.title('MBTI에 따른 추천 직업 및 이모지')
+st.title("페이스컬러(퍼스널 컬러) 기반 코디 추천")
 
-# 사용자 입력
-mbti_type = st.selectbox(
-    '당신의 MBTI 유형을 선택하세요:',
-    mbti_data.keys()
+st.write("당신의 페이스컬러(퍼스널 컬러)를 선택하세요:")
+
+facecolor = st.selectbox(
+    "퍼스널 컬러를 선택하세요.",
+    list(facecolor_data.keys())
 )
 
-# 선택된 MBTI 유형에 대한 정보 표시
-if mbti_type:
-    st.write(f"### 당신의 MBTI 유형: {mbti_type} {mbti_data[mbti_type]['emoji']}")
-    st.write("#### 추천 직업:")
-    for job in mbti_data[mbti_type]['jobs']:
-        st.write(f"- {job}")
+if facecolor:
+    st.subheader(f"추천 의상 색상 🎨")
+    st.write(", ".join(facecolor_data[facecolor]['의상']))
 
+    st.subheader("추천 화장법 💄")
+    st.write(", ".join(facecolor_data[facecolor]['화장법']))
+
+    st.subheader("최종 코디 제안 👗")
+    st.write(facecolor_data[facecolor]['코디'])
+
+st.write("---")
+st.write("퍼스널 컬러 진단이 필요하다면 전문가 상담을 추천합니다.")
