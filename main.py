@@ -1,9 +1,6 @@
 import streamlit as st
-from PIL import Image
-import google.generativeai as genai
-import io
 
-# 퍼스널 컬러 추천 데이터
+# 퍼스널 컬러별 추천 데이터
 facecolor_data = {
     '봄 웜톤': {
         '의상': ['라이트 옐로우', '코랄', '라이트 베이지', '연두색'],
@@ -27,71 +24,24 @@ facecolor_data = {
     }
 }
 
-# Gemini Vision API를 활용한 퍼스널 컬러 분석 함수
-def analyze_personal_color_gemini(image, gemini_api_key):
-    genai.configure(api_key=gemini_api_key)
-    model = genai.GenerativeModel('gemini-pro-vision')
+st.title("페이스컬러(퍼스널 컬러) 기반 코디 추천")
 
-    # 이미지를 바이너리로 변환
-    buf = io.BytesIO()
-    image.save(buf, format='JPEG')
-    byte_data = buf.getvalue()
+st.write("당신의 페이스컬러(퍼스널 컬러)를 선택하세요:")
 
-    prompt = (
-        "이 인물의 퍼스널 컬러(봄 웜톤, 여름 쿨톤, 가을 웜톤, 겨울 쿨톤 중 하나)를 전문가처럼 진단해주고, 한글로 결과만 간단히 알려주세요."
-    )
+facecolor = st.selectbox(
+    "퍼스널 컬러를 선택하세요.",
+    list(facecolor_data.keys())
+)
 
-    try:
-        response = model.generate_content(
-            [
-                prompt,
-                genai.types.content_types.ImageData(data=byte_data, mime_type="image/jpeg")
-            ]
-        )
-        result = response.text.strip()
-        return result
-    except Exception as e:
-        return f"Gemini API 오류: {e}"
+if facecolor:
+    st.subheader(f"추천 의상 색상 🎨")
+    st.write(", ".join(facecolor_data[facecolor]['의상']))
 
-# --- Streamlit 앱 UI ---
-st.title("사진 업로드 기반 퍼스널 컬러 분석 및 코디 추천 (Google Gemini)")
+    st.subheader("추천 화장법 💄")
+    st.write(", ".join(facecolor_data[facecolor]['화장법']))
 
-gemini_api_key = st.text_input("Gemini API Key를 입력하세요", type="password")
-uploaded_file = st.file_uploader("사진 업로드", type=["jpg", "jpeg", "png"])
-
-if not gemini_api_key:
-    st.info("Gemini API Key를 입력하세요.")
-elif uploaded_file is None:
-    st.info("사진을 업로드하세요.")
-else:
-    try:
-        image = Image.open(uploaded_file)
-        st.image(image, caption='업로드한 사진', use_column_width=True)
-        st.write("Gemini Vision으로 퍼스널 컬러 분석 중...")
-
-        personal_color = analyze_personal_color_gemini(image, gemini_api_key)
-        st.success(f"분석 결과: {personal_color}")
-
-        # 결과가 facecolor_data에 있을 때만 추천 정보 표시
-        result_key = None
-        for key in facecolor_data:
-            if key in personal_color:
-                result_key = key
-                break
-
-        if result_key:
-            st.subheader(f"추천 의상 색상 🎨")
-            st.write(", ".join(facecolor_data[result_key]['의상']))
-
-            st.subheader("추천 화장법 💄")
-            st.write(", ".join(facecolor_data[result_key]['화장법']))
-
-            st.subheader("최종 코디 제안 👗")
-            st.write(facecolor_data[result_key]['코디'])
-        else:
-            st.info("분석 결과가 예상한 퍼스널 컬러(봄 웜톤, 여름 쿨톤, 가을 웜톤, 겨울 쿨톤) 중 하나가 아닙니다. 답변: " + personal_color)
-    except Exception as e:
-        st.error(f"이미지 처리 중 오류가 발생했습니다: {e}")
+    st.subheader("최종 코디 제안 👗")
+    st.write(facecolor_data[facecolor]['코디'])
 
 st.write("---")
-st.write("※ Gemini API Vision 요금이 부과되며, API Key는 외부에 노출되지 않도록 주의하세요.")
+st.write("퍼스널 컬러 진단이 필요하다면 전문가 상담을 추천합니다.")
