@@ -2,4 +2,5 @@ plotly
 folium
 koreanize_matplotlib
 openai
-genai
+google-generativeai
+pillow
