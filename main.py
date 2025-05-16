@@ -3,6 +3,7 @@ from PIL import Image
 import google.generativeai as genai
 import io
 
+
 # 퍼스널 컬러 추천 데이터
 facecolor_data = {
     '봄 웜톤': {
