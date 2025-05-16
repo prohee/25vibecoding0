@@ -3,7 +3,6 @@ from PIL import Image
 import google.generativeai as genai
 import io
 
-
 # 퍼스널 컬러 추천 데이터
 facecolor_data = {
     '봄 웜톤': {
@@ -30,9 +29,6 @@ facecolor_data = {
 
 # Gemini Vision API를 활용한 퍼스널 컬러 분석 함수
 def analyze_personal_color_gemini(image, gemini_api_key):
-    import google.generativeai as genai
-    import io
-
     genai.configure(api_key=gemini_api_key)
     model = genai.GenerativeModel('gemini-pro-vision')
 
@@ -46,18 +42,17 @@ def analyze_personal_color_gemini(image, gemini_api_key):
     )
 
     try:
-        response = model.generate_content(    [
-        prompt,
-        {
-            "mime_type": "image/jpeg",
-            "data": byte_data,
-        }
-    ]
-    )
+        response = model.generate_content(
+            [
+                prompt,
+                genai.types.content_types.ImageData(data=byte_data, mime_type="image/jpeg")
+            ]
+        )
         result = response.text.strip()
         return result
     except Exception as e:
         return f"Gemini API 오류: {e}"
+
 # --- Streamlit 앱 UI ---
 st.title("사진 업로드 기반 퍼스널 컬러 분석 및 코디 추천 (Google Gemini)")
 
